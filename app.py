@@ -1,8 +1,11 @@
-from flask import Flask, render_template
+import sqlite3
 
-from database.db import init_db, seed_db
+from flask import Flask, redirect, render_template, request, session, url_for
+
+from database.db import create_user, get_user_by_email, init_db, seed_db
 
 app = Flask(__name__)
+app.config["SECRET_KEY"] = "dev-secret-change-in-production"  # TODO: load from env var in production
 
 with app.app_context():
     init_db()
@@ -18,9 +21,35 @@ def landing():
     return render_template("landing.html")
 
 
-@app.route("/register")
+@app.route("/register", methods=["GET", "POST"])
 def register():
-    return render_template("register.html")
+    if request.method == "GET":
+        return render_template("register.html")
+
+    name = request.form.get("name", "").strip()
+    email = request.form.get("email", "").strip()
+    password = request.form.get("password", "")
+
+    if not name:
+        return render_template("register.html", error="Name is required.", name=name, email=email)
+
+    if not email or "@" not in email:
+        return render_template("register.html", error="Enter a valid email address.", name=name, email=email)
+
+    if len(password) < 8:
+        return render_template("register.html", error="Password must be at least 8 characters.", name=name, email=email)
+
+    if get_user_by_email(email):
+        return render_template("register.html", error="Email already registered.", name=name, email=email)
+
+    try:
+        user_id = create_user(name, email, password)
+    except sqlite3.IntegrityError:
+        return render_template("register.html", error="Email already registered.", name=name, email=email)
+
+    session["user_id"] = user_id
+    session["name"] = name
+    return redirect(url_for("profile"))
 
 
 @app.route("/login")
