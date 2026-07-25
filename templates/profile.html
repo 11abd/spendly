@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}Your profile — Spendly{% endblock %}
+
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+
+{# NOTE: expenses below are hardcoded placeholder data for design preview only —
+   not wired to the database. Real data arrives in Step 7 (add expense) onward. #}
+{% set demo_expenses = [
+    {"category": "Food", "description": "Groceries", "date": "2026-07-02", "amount": 350.00},
+    {"category": "Transport", "description": "Auto fare", "date": "2026-07-03", "amount": 120.00},
+    {"category": "Bills", "description": "Electricity bill", "date": "2026-07-05", "amount": 2200.00},
+    {"category": "Health", "description": "Pharmacy", "date": "2026-07-08", "amount": 800.00},
+    {"category": "Entertainment", "description": "Movie night", "date": "2026-07-12", "amount": 500.00},
+    {"category": "Shopping", "description": "New shoes", "date": "2026-07-15", "amount": 1499.00},
+] %}
+{% set demo_total = demo_expenses | sum(attribute="amount") %}
+
+<section class="profile-section">
+    <div class="profile-container">
+
+        <div class="auth-header">
+            <h1 class="auth-title">Welcome, {{ user.name }}</h1>
+            <p class="auth-subtitle">{{ member_since }}</p>
+        </div>
+
+        <div class="auth-card">
+            <div class="form-group">
+                <label>Name</label>
+                <p>{{ user.name }}</p>
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <p>{{ user.email }}</p>
+            </div>
+            <div class="form-group">
+                <label>Member since</label>
+                <p>{{ member_since }}</p>
+            </div>
+        </div>
+
+        <div class="profile-stats">
+            <div class="hero-stat">
+                <span class="hero-stat-label">This month</span>
+                <span class="hero-stat-value">₹{{ "{:,.2f}".format(demo_total) }}</span>
+                <span class="hero-stat-change hero-stat-neutral">demo data</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-label">Transactions</span>
+                <span class="hero-stat-value">{{ demo_expenses | length }}</span>
+                <span class="hero-stat-change hero-stat-neutral">this month</span>
+            </div>
+            <div class="hero-stat">
+                <span class="hero-stat-label">Top category</span>
+                <span class="hero-stat-value">Bills</span>
+                <span class="hero-stat-change hero-stat-neutral">₹2,200.00</span>
+            </div>
+        </div>
+
+        <div class="auth-card profile-expenses-card">
+            <div class="profile-expenses-header">
+                <h2 class="profile-expenses-title">Recent expenses</h2>
+                <span class="profile-expenses-badge">Preview data</span>
+            </div>
+
+            <table class="expense-table">
+                <thead>
+                    <tr>
+                        <th>Category</th>
+                        <th>Description</th>
+                        <th>Date</th>
+                        <th class="expense-table-amount">Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for expense in demo_expenses %}
+                    <tr>
+                        <td><span class="expense-badge expense-badge-{{ expense.category | lower }}">{{ expense.category }}</span></td>
+                        <td>{{ expense.description }}</td>
+                        <td class="expense-table-date">{{ expense.date }}</td>
+                        <td class="expense-table-amount">₹{{ "{:,.2f}".format(expense.amount) }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <p class="auth-switch">
+            <a href="{{ url_for('logout') }}">Log out</a>
+        </p>
+
+    </div>
+</section>
+
+{% endblock %}

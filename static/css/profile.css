@@ -1,0 +1,119 @@
+/* ------------------------------------------------------------------ */
+/* Profile page                                                        */
+/* ------------------------------------------------------------------ */
+
+.profile-section {
+    padding: 3rem 2rem 4rem;
+    display: flex;
+    justify-content: center;
+}
+
+.profile-container {
+    width: 100%;
+    max-width: 760px;
+}
+
+.profile-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    margin-bottom: 1.5rem;
+}
+
+.profile-expenses-card {
+    padding: 1.75rem;
+}
+
+.profile-expenses-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.25rem;
+}
+
+.profile-expenses-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    color: var(--ink);
+}
+
+.profile-expenses-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--accent-2);
+    background: var(--accent-2-light);
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+}
+
+/* ------------------------------------------------------------------ */
+/* Expense table                                                       */
+/* ------------------------------------------------------------------ */
+
+.expense-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+
+.expense-table th {
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.8rem;
+    color: var(--ink-muted);
+    padding: 0 0.5rem 0.75rem;
+    border-bottom: 1px solid var(--border);
+}
+
+.expense-table td {
+    padding: 0.85rem 0.5rem;
+    border-bottom: 1px solid var(--border-soft);
+    color: var(--ink-soft);
+}
+
+.expense-table tbody tr:last-child td { border-bottom: none; }
+
+.expense-table tbody tr:hover { background: var(--paper-warm); }
+
+.expense-table-date { color: var(--ink-muted); }
+
+.expense-table-amount {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink);
+    font-weight: 500;
+}
+
+/* ------------------------------------------------------------------ */
+/* Category badges                                                     */
+/* ------------------------------------------------------------------ */
+
+.expense-badge {
+    display: inline-block;
+    font-size: 0.8rem;
+    font-weight: 500;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: var(--border-soft);
+    color: var(--ink-soft);
+}
+
+.expense-badge-food { background: #fdf0e0; color: #b3691a; }
+.expense-badge-transport { background: #e5edfb; color: #2d5bb8; }
+.expense-badge-bills { background: #f0eafb; color: #6b46c1; }
+.expense-badge-health { background: var(--danger-light); color: var(--danger); }
+.expense-badge-entertainment { background: var(--accent-light); color: #2f9161; }
+.expense-badge-shopping { background: var(--accent-2-light); color: var(--accent-2); }
+.expense-badge-other { background: var(--border-soft); color: var(--ink-muted); }
+
+/* ------------------------------------------------------------------ */
+/* Responsive                                                          */
+/* ------------------------------------------------------------------ */
+
+@media (max-width: 700px) {
+    .profile-stats { grid-template-columns: 1fr; }
+
+    .expense-table { font-size: 0.8rem; }
+    .expense-table th:nth-child(2),
+    .expense-table td:nth-child(2) { display: none; }
+}
