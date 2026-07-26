@@ -8,18 +8,6 @@
 
 {% block content %}
 
-{# NOTE: expenses below are hardcoded placeholder data for design preview only —
-   not wired to the database. Real data arrives in Step 7 (add expense) onward. #}
-{% set demo_expenses = [
-    {"category": "Food", "description": "Groceries", "date": "2026-07-02", "amount": 350.00},
-    {"category": "Transport", "description": "Auto fare", "date": "2026-07-03", "amount": 120.00},
-    {"category": "Bills", "description": "Electricity bill", "date": "2026-07-05", "amount": 2200.00},
-    {"category": "Health", "description": "Pharmacy", "date": "2026-07-08", "amount": 800.00},
-    {"category": "Entertainment", "description": "Movie night", "date": "2026-07-12", "amount": 500.00},
-    {"category": "Shopping", "description": "New shoes", "date": "2026-07-15", "amount": 1499.00},
-] %}
-{% set demo_total = demo_expenses | sum(attribute="amount") %}
-
 <section class="profile-section">
     <div class="profile-container">
 
@@ -45,28 +33,29 @@
 
         <div class="profile-stats">
             <div class="hero-stat">
-                <span class="hero-stat-label">This month</span>
-                <span class="hero-stat-value">₹{{ "{:,.2f}".format(demo_total) }}</span>
-                <span class="hero-stat-change hero-stat-neutral">demo data</span>
+                <span class="hero-stat-label">Total spent</span>
+                <span class="hero-stat-value">₹{{ "{:,.2f}".format(total_spent) }}</span>
             </div>
             <div class="hero-stat">
                 <span class="hero-stat-label">Transactions</span>
-                <span class="hero-stat-value">{{ demo_expenses | length }}</span>
-                <span class="hero-stat-change hero-stat-neutral">this month</span>
+                <span class="hero-stat-value">{{ expenses | length }}</span>
             </div>
             <div class="hero-stat">
                 <span class="hero-stat-label">Top category</span>
-                <span class="hero-stat-value">Bills</span>
-                <span class="hero-stat-change hero-stat-neutral">₹2,200.00</span>
+                <span class="hero-stat-value">{{ top_category or "—" }}</span>
+                {% if top_category %}
+                <span class="hero-stat-change hero-stat-neutral">₹{{ "{:,.2f}".format(top_category_total) }}</span>
+                {% endif %}
             </div>
         </div>
 
         <div class="auth-card profile-expenses-card">
             <div class="profile-expenses-header">
                 <h2 class="profile-expenses-title">Recent expenses</h2>
-                <span class="profile-expenses-badge">Preview data</span>
+                <a href="{{ url_for('add_expense') }}" class="btn-submit profile-expenses-add">Add expense</a>
             </div>
 
+            {% if expenses %}
             <table class="expense-table">
                 <thead>
                     <tr>
@@ -74,19 +63,27 @@
                         <th>Description</th>
                         <th>Date</th>
                         <th class="expense-table-amount">Amount</th>
+                        <th class="expense-table-actions">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for expense in demo_expenses %}
+                    {% for expense in expenses %}
                     <tr>
                         <td><span class="expense-badge expense-badge-{{ expense.category | lower }}">{{ expense.category }}</span></td>
-                        <td>{{ expense.description }}</td>
+                        <td>{{ expense.description or "" }}</td>
                         <td class="expense-table-date">{{ expense.date }}</td>
                         <td class="expense-table-amount">₹{{ "{:,.2f}".format(expense.amount) }}</td>
+                        <td class="expense-table-actions">
+                            <a href="{{ url_for('edit_expense', id=expense.id) }}">Edit</a>
+                            <a href="{{ url_for('delete_expense', id=expense.id) }}">Delete</a>
+                        </td>
                     </tr>
                     {% endfor %}
                 </tbody>
             </table>
+            {% else %}
+            <p class="auth-subtitle">No expenses yet. <a href="{{ url_for('add_expense') }}">Add your first one</a>.</p>
+            {% endif %}
         </div>
 
         <p class="auth-switch">
