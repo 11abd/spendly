@@ -46,6 +46,12 @@
     border-radius: 999px;
 }
 
+.profile-expenses-add {
+    width: auto;
+    padding: 0.55rem 1.1rem;
+    font-size: 0.85rem;
+}
+
 /* ------------------------------------------------------------------ */
 /* Expense table                                                       */
 /* ------------------------------------------------------------------ */
@@ -82,6 +88,20 @@
     font-variant-numeric: tabular-nums;
     color: var(--ink);
     font-weight: 500;
+}
+
+.expense-table-actions {
+    text-align: right;
+    white-space: nowrap;
+}
+
+.expense-table-actions a {
+    color: var(--accent);
+    font-size: 0.85rem;
+}
+
+.expense-table-actions a + a {
+    margin-left: 0.75rem;
 }
 
 /* ------------------------------------------------------------------ */
